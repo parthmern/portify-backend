@@ -124,8 +124,6 @@ userRouter.get('/username/:id', async (c: any) => {
 
 userRouter.put('/username', async (c: any) => {
 
-
-
     const DATABASE_URL = c.env.DATABASE_URL;
     const prisma = new PrismaClient({
         datasourceUrl: DATABASE_URL
@@ -153,6 +151,55 @@ userRouter.put('/username', async (c: any) => {
             {
                 message : "username updated",
                 updatedUsername
+            }
+        )
+
+    }
+    catch (error) {
+        console.log(error);
+        return (
+            c.json(
+                {
+                    message: "error in username update",
+                    success: false,
+                    error,
+                }
+            )
+        )
+
+    }
+
+})
+
+userRouter.get('/userid/:username', async (c: any) => {
+    
+    const DATABASE_URL = c.env.DATABASE_URL;
+    const prisma = new PrismaClient({
+        datasourceUrl: DATABASE_URL
+    }).$extends(withAccelerate());
+
+    try {
+
+        const username = c.req.param('username');
+        console.log(username);
+
+        const fetchedDetails = await prisma.user.findUnique({
+            where: {
+              username: username
+            },
+            include: {
+              profile: true, 
+            }
+        });
+
+        if(!fetchedDetails){
+            throw new Error("username details not found");
+        }
+        
+        return c.json(
+            {
+                message : "username details found",
+                fetchedDetails
             }
         )
 
