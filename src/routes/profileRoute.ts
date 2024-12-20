@@ -41,54 +41,69 @@ profileRouter.post('/profile', async (c: any) => {
         const formData: any = await c.req.parseBody(); // Parse form data
 
         console.log(formData);
-        const file: any = formData.img; // Access the file in the form data
+        const file: any = formData.photo; // Access the file in the form data
         const fields: any = formData; // Access other fields
 
-        if (!file) {
-            return c.json({ error: 'No file uploaded' }, 400);
+        const userId = JSON.parse(fields?.userData).id ;
+
+        if(!userId){
+            return c.json({ error: 'user id not available' }, 400);
         }
 
-        // Upload to Cloudinary
-        const uploadResponse: any = await uploadToCloudinary(file);
+        if (file) {
+            // Upload to Cloudinary
+            var uploadResponse: any = await uploadToCloudinary(file);
+            console.log(uploadResponse.secure_url);
+            // return c.json({ error: 'No file uploaded' }, 400);
+        }
 
+        
         // Prepare response data
         //@ts-ignore
         const data: any = {
             name: fields?.name,
             about: fields?.about,
-            img: uploadResponse.secure_url, // Cloudinary URL of the uploaded image
+            img: file ? uploadResponse.secure_url : null , // Cloudinary URL of the uploaded image
             userId: JSON.parse(fields?.userData).id,
         };
+        console.log("data to be posted to db=?", data);
 
-        const profileId = fields?.profileId;
-        console.log(uploadResponse.secure_url);
+        // const profileId = fields?.profileId;
+        
 
         const isPorfileAvailable = await prisma.profile.findUnique({
             where: {
-                id: profileId,
+                userId: userId,
             }
         });
 
         if (!isPorfileAvailable) {
+            
             const createdProfile = await prisma.profile.create(
                 {
-                    data: data
+                    data: {
+                        name: fields?.name,
+                        about: fields?.about,
+                        img: file ? uploadResponse.secure_url : null , 
+                        userId: userId,
+                    }
                 }
             )
             return c.json(createdProfile, 200);
         } else {
             const updatedProfile = await prisma.profile.update({
                 where: {
-                    id: profileId,
+                    userId: userId,
                 },
-                data: data,
+                data: {
+                    name: fields?.name,
+                    about: fields?.about,
+                    img: file ? uploadResponse.secure_url : null ,
+                },
             });
 
             return c.json(updatedProfile, 200);
         }
-
-
-
 
 
     } catch (error: any) {
@@ -96,3 +111,41 @@ profileRouter.post('/profile', async (c: any) => {
         return c.json({ error: 'File upload or processing failed', message: error.message }, 500);
     }
 });
+
+
+// route to fetch previous details of profile section
+profileRouter.get('/profile/:id', async (c:any)=>{
+    try{
+        const userId = c.req.param('id');
+        console.log("userId=>", userId);
+
+        const DATABASE_URL = c.env.DATABASE_URL;
+        const prisma = new PrismaClient({
+            datasourceUrl: DATABASE_URL
+        }).$extends(withAccelerate());
+
+        const profileData = await prisma.profile.findUnique({
+            where: {
+                userId: userId,
+            }
+        });
+
+        console.log("profileData=>", profileData);
+    
+        return c.json({
+            message : "Profile Data Fetched",
+            profileData : profileData,
+        }, 200);
+
+    }
+    catch(error){
+
+        console.log("error=>", error);
+
+        return c.json({
+            message : "Profile Data Fetched Error",
+            error : error,
+        }, 400);
+
+    }
+})

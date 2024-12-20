@@ -5,11 +5,11 @@ import { withAccelerate } from '@prisma/extension-accelerate'
 
 export const userRouter = new Hono();
 
-userRouter.post('/', async (c) => {
+userRouter.post('/login', async (c) => {
 
     try {
         // @ts-ignore
-        const DATABASE_URL = c.env.DATABASE_URL ;
+        const DATABASE_URL = c.env.DATABASE_URL;
         console.log("dburl=>", DATABASE_URL);
         const prisma = new PrismaClient({
             datasourceUrl: DATABASE_URL
@@ -32,6 +32,7 @@ userRouter.post('/', async (c) => {
                         email: body.email,
                         name: body.name,
                         password: body.password,
+                        username: body.email,
                     }
                 }
             )
@@ -65,6 +66,109 @@ userRouter.post('/', async (c) => {
             message: "Error in Login",
             error
         })
+    }
+
+})
+
+userRouter.get('/username/:id', async (c: any) => {
+
+    try {
+
+        const userId = c.req.param('id');
+        console.log("userId=>", userId);
+
+        const DATABASE_URL = c.env.DATABASE_URL;
+        const prisma = new PrismaClient({
+            datasourceUrl: DATABASE_URL
+        }).$extends(withAccelerate());
+
+        if (!userId) {
+            throw new Error("user id unavailable");
+        }
+
+        const usernameDetails = await prisma.user.findUnique({
+            where: {
+                id: userId,
+            },
+            select: {
+                username: true,
+            },
+        });
+
+        if (!usernameDetails) {
+            throw new Error("usernameDetails null");
+        }
+
+        const username = usernameDetails?.username;
+
+        return c.json(
+            {
+                message: "Username fetched successfully",
+                username
+            }
+            , 200)
+
+    }
+    catch (error) {
+
+        console.log("error==>", error);
+        return c.json(
+            {
+                message: "Username fetched failed",
+                error
+            }
+            , 400)
+
+    }
+})
+
+userRouter.put('/username', async (c: any) => {
+
+
+
+    const DATABASE_URL = c.env.DATABASE_URL;
+    const prisma = new PrismaClient({
+        datasourceUrl: DATABASE_URL
+    }).$extends(withAccelerate());
+
+    try {
+        const body = await c.req.json();
+        console.log(body);
+
+        if (!(body.username && body.userId)) {
+            throw new Error("username,user id not avialable");
+        }
+
+        const updatedUsername = await prisma.user.update({
+            where: {
+                id: body.userId
+            },
+            data: {
+                username: body.username
+            }
+
+        });
+
+        return c.json(
+            {
+                message : "username updated",
+                updatedUsername
+            }
+        )
+
+    }
+    catch (error) {
+        console.log(error);
+        return (
+            c.json(
+                {
+                    message: "error in username update",
+                    success: false,
+                    error,
+                }
+            )
+        )
+
     }
 
 })
