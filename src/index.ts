@@ -1,6 +1,9 @@
 import { Hono } from 'hono'
 import { userRouter } from './routes/userRoute';
 import { env } from 'hono/adapter'
+import { profileRouter } from './routes/profileRoute';
+import { cors } from "hono/cors";
+
 
 // import "dotenv/config";
 // import dotenv from 'dotenv';
@@ -15,7 +18,10 @@ import { env } from 'hono/adapter'
 // }>()
 const app = new Hono();
 
+app.use("*", cors());
+
 app.route("/api/v1/user", userRouter);
+app.route("/api/v1/", profileRouter);
 
 app.get('/', (c) => {
   console.log("cev", c.env);
