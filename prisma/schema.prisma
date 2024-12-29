@@ -20,6 +20,7 @@ model User {
   name     String?
   password String   @default("123456")
   profile  Profile?
+  skills Skills?
 }
 
 model Profile {
@@ -27,6 +28,14 @@ model Profile {
   name    String
   about   String?
   img     String?
+  user    User   @relation(fields: [userId], references: [id])
+  userId  String @unique 
+  aboutSection String?
+}
+
+model Skills {
+  id   String    @id @default(cuid()) 
+  name String[]
   user    User   @relation(fields: [userId], references: [id])
   userId  String @unique 
 }

@@ -65,6 +65,7 @@ profileRouter.post('/profile', async (c: any) => {
             about: fields?.about,
             img: file ? uploadResponse.secure_url : null , // Cloudinary URL of the uploaded image
             userId: JSON.parse(fields?.userData).id,
+            aboutSection : fields.aboutSection,
         };
         console.log("data to be posted to db=?", data);
 
@@ -86,6 +87,7 @@ profileRouter.post('/profile', async (c: any) => {
                         about: fields?.about,
                         img: file ? uploadResponse.secure_url : null , 
                         userId: userId,
+                        aboutSection: fields.aboutSection ? fields.aboutSection : "" ,
                     }
                 }
             )
@@ -99,6 +101,7 @@ profileRouter.post('/profile', async (c: any) => {
                     name: fields?.name,
                     about: fields?.about,
                     img: file ? uploadResponse.secure_url : null ,
+                    aboutSection: fields.aboutSection,
                 },
             });
 
