@@ -12,11 +12,11 @@ skillsRouter.post('/', async (c: any) => {
     }).$extends(withAccelerate());
 
     try {
-        const reqData = await c.req.parseBody();
+        const reqData = await c.req.json();
         console.log(reqData);
 
-        const skills: Array<string> = reqData.skills;
-        const userId: string = JSON.parse(reqData?.userData).id;
+        const skills: Array<string> = reqData?.skills;
+        const userId: string = reqData?.userId;
 
         if (!userId) {
             throw Error("User id not available");
@@ -91,22 +91,26 @@ skillsRouter.get('/:id', async (c: any) => {
         const userId: string = c.req.param('id');
         console.log("userId=>", userId);
 
+        if (!userId) {
+            throw Error("User id not available");
+        }
+
         const fetchedSkillsSection = await prisma.skills.findUnique({
             where: {
                 userId: userId
             }
         })
 
-        if (!fetchedSkillsSection) {
-            throw Error("Error while fetching skills");
-        }
+        // if (!fetchedSkillsSection) {
+        //     throw Error("Error while fetching skills");
+        // }
 
         console.log(fetchedSkillsSection);
 
         return c.json({
             success: true,
-            message: "Old skills section updated successfully",
-            skills: fetchedSkillsSection,
+            message: "skills section fetched successfully",
+            skills: fetchedSkillsSection || "",
         }, 200);
 
 
