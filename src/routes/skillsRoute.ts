@@ -16,6 +16,7 @@ skillsRouter.post('/', async (c: any) => {
         console.log(reqData);
 
         const skills: Array<string> = reqData?.skills;
+        const githubUsername: string = reqData?.githubUsername;
         const userId: string = reqData?.userId;
 
         if (!userId) {
@@ -34,6 +35,7 @@ skillsRouter.post('/', async (c: any) => {
                 data: {
                     userId: userId,
                     name: skills,
+                    githubUsername : githubUsername ? githubUsername : "null"
                 }
             });
             console.log(createdSkillsSection);
@@ -52,6 +54,7 @@ skillsRouter.post('/', async (c: any) => {
                 },
                 data: {
                     name: skills,
+                    githubUsername : githubUsername ? githubUsername : "null"
                 }
             })
 

@@ -37,5 +37,6 @@ model Skills {
   id   String    @id @default(cuid()) 
   name String[]
   user    User   @relation(fields: [userId], references: [id])
-  userId  String @unique 
+  userId  String @unique
+  githubUsername String @default("null")
 }
