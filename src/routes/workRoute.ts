@@ -97,3 +97,73 @@ workRoute.post("/", async(c:any)=>{
 
 
 })
+
+workRoute.get("/:userId", async (c:any)=>{
+
+    try{
+        const DATABASE_URL : string = c.env.DATABASE_URL;
+        const prisma = new PrismaClient({
+            datasourceUrl: DATABASE_URL
+        }).$extends(withAccelerate());
+
+        const userId = c.req.param('userId');
+        console.log(userId);
+
+        if(!userId){
+            throw Error("Userid is needed");
+        }
+
+        const allWorks = await prisma.works.findMany({
+            where:{
+                userId : userId,
+            }
+        })
+
+        console.log(allWorks);
+
+        return c.json(allWorks, 200);
+
+        
+
+    }
+    catch(error){
+        console.log(error);
+        return c.json(error, 500);
+    }
+
+})
+
+workRoute.delete("/:workid", async(c:any)=>{
+
+
+    try{
+        const DATABASE_URL : string = c.env.DATABASE_URL;
+        const prisma = new PrismaClient({
+            datasourceUrl: DATABASE_URL
+        }).$extends(withAccelerate());
+
+        const workid = c.req.param('workid');
+        console.log(workid);
+
+        if(!workid){
+            throw Error("workid is needed");
+        }
+
+        const deletedwork = await prisma.works.delete({
+            where:{
+                id : workid,
+            }
+        })
+
+        console.log(deletedwork);
+
+        return c.json(deletedwork, 200);
+
+    }
+    catch(error){
+        console.log(error);
+        return c.json(error, 500);
+    }
+
+
+})
