@@ -21,6 +21,7 @@ model User {
   password String   @default("123456")
   profile  Profile?
   skills Skills?
+  works Works?
 }
 
 model Profile {
@@ -40,3 +41,19 @@ model Skills {
   userId  String @unique
   githubUsername String @default("null")
 }
+
+model Works {
+  id   String    @id @default(cuid()) 
+  user    User   @relation(fields: [userId], references: [id])
+  userId  String @unique
+
+  company     String?
+  href        String?
+  location    String?
+  title       String
+  logoUrl     String?
+  start       String?
+  end         String?
+  description String
+}
+

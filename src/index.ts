@@ -4,6 +4,7 @@ import { env } from 'hono/adapter'
 import { profileRouter } from './routes/profileRoute';
 import { cors } from "hono/cors";
 import { skillsRouter } from './routes/skillsRoute';
+import { workRoute } from './routes/workRoute';
 
 
 // import "dotenv/config";
@@ -24,6 +25,7 @@ app.use("*", cors());
 app.route("/api/v1/user", userRouter);
 app.route("/api/v1/", profileRouter);
 app.route("/api/v1/skills", skillsRouter);
+app.route("/api/v1/works", workRoute);
 
 app.get('/', (c) => {
   console.log("cev", c.env);
