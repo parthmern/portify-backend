@@ -107,3 +107,32 @@ educationRoute.get("/:userId", async (c: any) => {
     return c.json(error, 500);
   }
 });
+
+educationRoute.delete("/:educationId", async (c: any) => {
+  try {
+    const DATABASE_URL: string = c.env.DATABASE_URL;
+    const prisma = new PrismaClient({
+      datasourceUrl: DATABASE_URL
+    }).$extends(withAccelerate());
+
+    const educationId = c.req.param('educationId');
+    console.log(educationId);
+
+    if (!educationId) {
+      throw new Error("EducationId is required");
+    }
+
+    const deletedEducation = await prisma.education.delete({
+      where: {
+        id: educationId,
+      },
+    });
+
+    console.log(deletedEducation);
+    return c.json(deletedEducation, 200);
+
+  } catch (error) {
+    console.log(error);
+    return c.json(error, 500);
+  }
+});
