@@ -78,3 +78,32 @@ educationRoute.post("/", async (c: any) => {
     return c.json(error, 500);
   }
 });
+
+educationRoute.get("/:userId", async (c: any) => {
+  try {
+    const DATABASE_URL: string = c.env.DATABASE_URL;
+    const prisma = new PrismaClient({
+      datasourceUrl: DATABASE_URL
+    }).$extends(withAccelerate());
+
+    const userId = c.req.param('userId');
+    console.log(userId);
+
+    if (!userId) {
+      throw new Error("UserId is required");
+    }
+
+    const allEducation = await prisma.education.findMany({
+      where: {
+        userId: userId,
+      },
+    });
+
+    console.log(allEducation);
+    return c.json(allEducation, 200);
+
+  } catch (error) {
+    console.log(error);
+    return c.json(error, 500);
+  }
+});
