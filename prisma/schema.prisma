@@ -22,6 +22,7 @@ model User {
   profile  Profile?
   skills Skills?
   works    Works[]
+  education Education[]
 }
 
 model Profile {
@@ -57,3 +58,17 @@ model Works {
   description String
 }
 
+model Education {
+
+  id   String    @id @default(cuid()) 
+  user    User   @relation(fields: [userId], references: [id])
+  userId  String 
+
+  name        String
+  href        String
+  degree      String
+  logoUrl     String
+  start       String
+  end         String
+  description String
+}
