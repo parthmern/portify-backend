@@ -63,7 +63,7 @@ educationRoute.post("/", async (c: any) => {
         name: fields.name,
         href: fields.href,
         degree: fields.degree,
-        logoUrl: file && uploadResponse.secure_url ? uploadResponse.secure_url : null,
+        logoUrl: file && uploadResponse?.secure_url ? uploadResponse?.secure_url : null,
         start: fields.start,
         end: fields.end,
         description: fields.description,

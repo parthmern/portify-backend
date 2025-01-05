@@ -5,6 +5,7 @@ import { profileRouter } from './routes/profileRoute';
 import { cors } from "hono/cors";
 import { skillsRouter } from './routes/skillsRoute';
 import { workRoute } from './routes/workRoute';
+import { educationRoute } from './routes/educationRoute';
 
 
 // import "dotenv/config";
@@ -26,6 +27,7 @@ app.route("/api/v1/user", userRouter);
 app.route("/api/v1/", profileRouter);
 app.route("/api/v1/skills", skillsRouter);
 app.route("/api/v1/works", workRoute);
+app.route("/api/v1/education", educationRoute);
 
 app.get('/', (c) => {
   console.log("cev", c.env);

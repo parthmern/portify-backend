@@ -65,10 +65,10 @@ model Education {
   userId  String 
 
   name        String
-  href        String
-  degree      String
-  logoUrl     String
-  start       String
-  end         String
-  description String
+  href        String?
+  degree      String?
+  logoUrl     String?
+  start       String?
+  end         String?
+  description String?
 }

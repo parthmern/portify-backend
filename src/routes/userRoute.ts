@@ -191,6 +191,7 @@ userRouter.get('/userid/:username', async (c: any) => {
               profile: true, 
               skills:true,
               works:true,
+              education:true,
             }
         });
 
