@@ -101,3 +101,61 @@ projectRoute.post("/", async (c: any) => {
         return c.json({ error: error.message }, 500);
     }
 });
+
+projectRoute.get("/:userId", async (c: any) => {
+    try {
+        const DATABASE_URL: string = c.env.DATABASE_URL;
+        const prisma = new PrismaClient({
+            datasourceUrl: DATABASE_URL
+        }).$extends(withAccelerate());
+
+        const userId = c.req.param('userId');
+        console.log(userId);
+
+        if (!userId) {
+            throw new Error("UserId is required");
+        }
+
+        const allProjects = await prisma.project.findMany({
+            where: {
+                userId: userId,
+            },
+        });
+
+        console.log(allProjects);
+        return c.json(allProjects, 200);
+
+    } catch (error) {
+        console.log(error);
+        return c.json(error, 500);
+    }
+});
+
+projectRoute.delete("/:projectId", async (c: any) => {
+    try {
+        const DATABASE_URL: string = c.env.DATABASE_URL;
+        const prisma = new PrismaClient({
+            datasourceUrl: DATABASE_URL
+        }).$extends(withAccelerate());
+
+        const projectId = c.req.param('projectId');
+        console.log(projectId);
+
+        if (!projectId) {
+            throw new Error("ProjectId is required");
+        }
+
+        const deletedProject = await prisma.project.delete({
+            where: {
+                id: projectId,
+            },
+        });
+
+        console.log(deletedProject);
+        return c.json(deletedProject, 200);
+
+    } catch (error) {
+        console.log(error);
+        return c.json(error, 500);
+    }
+});
