@@ -84,7 +84,9 @@ model Project{
   href  String?
   description String?
   technologies String[]
-  links String[]
+  liveLink String?
+  githubRepoLink String?
+  otherLink String?
   image String?
   thumbnail String?
   featuredVideo String?

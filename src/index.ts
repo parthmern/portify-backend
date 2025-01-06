@@ -6,6 +6,7 @@ import { cors } from "hono/cors";
 import { skillsRouter } from './routes/skillsRoute';
 import { workRoute } from './routes/workRoute';
 import { educationRoute } from './routes/educationRoute';
+import { projectRoute } from './routes/projectRoute';
 
 
 // import "dotenv/config";
@@ -28,6 +29,7 @@ app.route("/api/v1/", profileRouter);
 app.route("/api/v1/skills", skillsRouter);
 app.route("/api/v1/works", workRoute);
 app.route("/api/v1/education", educationRoute);
+app.route("/api/v1/projects", projectRoute);
 
 app.get('/', (c) => {
   console.log("cev", c.env);
