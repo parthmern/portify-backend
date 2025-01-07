@@ -24,6 +24,7 @@ model User {
   works    Works[]
   education Education[]
   project Project[]
+  contact Contact?
 }
 
 model Profile {
@@ -93,5 +94,19 @@ model Project{
   video String?
   featured Boolean?
   context String?
+
+}
+
+model Contact{
+
+  id String @id @default(cuid())
+  user    User   @relation(fields: [userId], references: [id])
+  userId  String @unique 
+
+  emailId String @default("")
+  githubUrl String @default("")
+  leetcodeUrl String @default("")
+  linkedinUrl String @default("")
+  twitterUrl String @default("")
 
 }
