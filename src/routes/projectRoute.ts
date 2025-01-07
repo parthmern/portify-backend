@@ -7,12 +7,12 @@ const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dncm3mid4/image/upload';
 const UPLOAD_PRESET = 'xas6zgld'; // If you have an upload preset
 
 // Upload function to Cloudinary
-async function uploadToCloudinary(file: any) {
+async function uploadToCloudinary(file: any, type: any) {
     const form = new FormData();
     form.append('file', file);
     form.append('upload_preset', UPLOAD_PRESET);
 
-    const response = await fetch(CLOUDINARY_URL, {
+    const response = await fetch(`https://api.cloudinary.com/v1_1/dncm3mid4/${type}/upload`, {
         method: 'POST',
         body: form,
     });
@@ -59,17 +59,17 @@ projectRoute.post("/", async (c: any) => {
         let featuredVideoUploadResponse: any;
 
         if (imageFile) {
-            imageUploadResponse = await uploadToCloudinary(imageFile);
+            imageUploadResponse = await uploadToCloudinary(imageFile, 'image');
             console.log("image url==>", imageUploadResponse.secure_url);
         }
 
         if (thumbnailFile) {
-            thumbnailUploadResponse = await uploadToCloudinary(thumbnailFile);
+            thumbnailUploadResponse = await uploadToCloudinary(thumbnailFile, 'image');
             console.log("thumbnail url==>", thumbnailUploadResponse.secure_url);
         }
 
         if (featuredVideoFile) {
-            featuredVideoUploadResponse = await uploadToCloudinary(featuredVideoFile);
+            featuredVideoUploadResponse = await uploadToCloudinary(featuredVideoFile, 'video');
             console.log("featured video url==>", featuredVideoUploadResponse.secure_url);
         }
 
