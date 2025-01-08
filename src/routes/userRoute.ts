@@ -193,6 +193,7 @@ userRouter.get('/userid/:username', async (c: any) => {
               works:true,
               education:true,
               project:true,
+              contact: true,
             }
         });
 
