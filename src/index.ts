@@ -40,7 +40,7 @@ app.get('/', (c) => {
   const DATABASE_URL  = env<{ DATABASE_URL: string }>(c)
 
   // @ts-ignore
-  console.log("dburl=>", DATABASE_URL);
+  //console.log("dburl=>", DATABASE_URL);
   return c.text('hello from hono js with cloudflare workers/wrangler');
 })
 

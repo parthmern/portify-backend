@@ -4,7 +4,7 @@ import { withAccelerate } from '@prisma/extension-accelerate';
 
 // Cloudflare API URL
 const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dncm3mid4/image/upload';
-const UPLOAD_PRESET = 'xas6zgld'; // If you have an upload preset
+const UPLOAD_PRESET = 'xas6zgld';
 
 // Upload function to Cloudinary
 async function uploadToCloudinary(file: any) {
