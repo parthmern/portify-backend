@@ -4,7 +4,10 @@
     "dev": "wrangler dev",
     "deploy": "wrangler deploy --minify",
     "cf-typegen": "wrangler types --env-interface CloudflareBindings",
-    "test": "npx vitest"
+    "test": "npx vitest",
+    "test:unit-test" : "npx vitest ./__test__/unitTest",
+    "test:integration-test" : "sh ./__test__/integrationTest/scripts/run-integration.sh",
+    "test:integration-test-folder" : "npx vitest ./__test__/integrationTest"
   },
   "dependencies": {
     "@prisma/client": "^6.1.0",
