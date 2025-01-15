@@ -5,9 +5,10 @@
     "deploy": "wrangler deploy --minify",
     "cf-typegen": "wrangler types --env-interface CloudflareBindings",
     "test": "npx vitest",
-    "test:unit-test" : "npx vitest ./__test__/unitTest",
-    "test:integration-test" : "sh ./__test__/integrationTest/scripts/run-integration.sh",
-    "test:integration-test-folder" : "npx vitest ./__test__/integrationTest"
+    "test:unit-test": "npx vitest ./__test__/unitTest",
+    "test:integration-test": "sh ./__test__/integrationTest/scripts/run-integration.sh",
+    "test:integration-test-folder": "npx vitest ./__test__/integrationTest",
+    "test:endtoend-test": "cd ./__test__/endtoendTest/ && npx cypress run --browser chrome --headed"
   },
   "dependencies": {
     "@prisma/client": "^6.1.0",
@@ -15,6 +16,7 @@
     "@types/formidable": "^3.4.5",
     "@types/supertest": "^6.0.2",
     "cloudinary": "^2.5.1",
+    "cross-env": "^7.0.3",
     "dotenv": "^16.4.7",
     "formidable": "^3.5.2",
     "prisma": "^6.1.0",
@@ -24,6 +26,7 @@
     "@cloudflare/workers-types": "^4.20241218.0",
     "@hono/node-server": "^1.13.7",
     "@jest/globals": "^29.7.0",
+    "cypress": "^13.17.0",
     "ts-jest": "^29.2.5",
     "vitest": "^2.1.8",
     "wrangler": "^3.96.0"

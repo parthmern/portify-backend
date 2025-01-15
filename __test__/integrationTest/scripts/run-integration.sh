@@ -1,11 +1,15 @@
+ls -l
+
 docker-compose up -d
 
 echo '🟡 - Waiting for database to be ready...'
 
-./scripts/wait-for-it.sh "postgresql://postgres:mysecretpassword@localhost:5432/postgres" -- echo '🟢 - Database is ready!'
+./__test__/integrationTest/scripts/wait-for-it.sh "postgresql://postgres:mysecretpassword@localhost:5432/postgres" -- echo '🟢 - Database is ready!'
 
-npx prisma migrate dev --name init
+npx cross-env ORIGINAL_DB_URL="postgresql://postgres:mysecretpassword@localhost:5432/postgres" npx prisma migrate dev --name init 
+npx prisma generate --no-engine
 
-npm run test:integration-test-folder
+
+npx cross-env DATABASE_URL="postgresql://postgres:mysecretpassword@localhost:5432/postgres" npm run test:integration-test-folder
 
 docker-compose down
