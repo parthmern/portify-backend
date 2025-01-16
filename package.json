@@ -11,6 +11,8 @@
     "test:endtoend-test": "cd ./__test__/endtoendTest/ && npx cypress run --browser chrome --headed"
   },
   "dependencies": {
+    "@cypress/react": "^9.0.0",
+    "@cypress/react18": "^2.0.1",
     "@prisma/client": "^6.1.0",
     "@prisma/extension-accelerate": "^1.2.1",
     "@types/formidable": "^3.4.5",
